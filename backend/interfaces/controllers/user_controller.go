@@ -1,10 +1,10 @@
 package controllers
 
 import (
+	"strconv"
 	"treasure-app/backend/domain"
 	"treasure-app/backend/interfaces/database"
 	"treasure-app/backend/usecase"
-	"strconv"
 )
 
 type UserController struct {
