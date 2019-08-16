@@ -31,3 +31,10 @@ interfaces/databaseからのInputをusecase/user_repository.goで、interfaces/c
 
 #### ショップ詳細 (GET /shops/{:id})
 `curl -i -H 'Content-Type:application/json' localhost:8080/shops/1`
+
+### いいね
+#### いいね登録 (POST /users/like)
+`curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"user_id": 1, "shop_id": 1}' localhost:8080/users/like`
+
+### いいね削除 (DELETE /users/like)
+`curl -i -H "Accept: application/json" -H "Content-type: application/json" -X DELETE -d '{"user_id": 1, "shop_id": 1}' localhost:8080/users/like`
