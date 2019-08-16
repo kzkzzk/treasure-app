@@ -8,7 +8,7 @@ import firebase from 'firebase'
 Vue.use(Router)
  
 let router = new Router({
-//     mode: 'history',
+  mode: 'history',
 //   base: process.env.BASE_URL,
   routes: [
     {
