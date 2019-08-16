@@ -1,0 +1,8 @@
+domain	Entities ビジネスルールのためのデータ
+infrastructure	Frameworks & Drivers
+interfaces	Interface
+usecase	Use cases
+
+DB接続には、外部パッケージを使用しているので、infrastructure層に定義し外側のルールを内側に持ち込まない
+
+interfaces/databaseからのInputをusecase/user_repository.goで、interfaces/controllersへのGatewayをusecase/user_interactor.goで実現
