@@ -29,11 +29,15 @@ export default {
       })
     },
     apiUsers: async function () {
-      let res = await axios.get('http://localhost:8080/users')
+      let res = await axios.get('http://localhost:8080/users', {
+        headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
+      })
       this.msg = res.data
     },
     apiTags: async function () {
-      let res = await axios.get('http://localhost:8080/tags')
+      let res = await axios.get('http://localhost:8080/tags', {
+        headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
+      })
       this.msg = res.data
     }
   }

@@ -24,6 +24,8 @@ func init() {
 		// MaxAge: 12 * time.Hour,
 	}))
 
+	router.Use(authMiddleware())
+
 	userController := controllers.NewUserController(NewSqlHandler())
 	likeController := controllers.NewLikeController(NewSqlHandler())
 

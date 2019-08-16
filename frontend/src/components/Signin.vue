@@ -24,7 +24,8 @@ export default {
         signIn: function () {
             //サーバーでの認証に使うJWT(res.user.qa)をローカルストレージに保管
             firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(res => {
-                localStorage.setItem('jwt', res.user.qa)
+                console.log(res);
+                localStorage.setItem('jwt', res.user.ra)
                 this.$router.push('/')
             }, err => {
                 alert(err.message)
