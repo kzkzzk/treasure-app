@@ -7,4 +7,5 @@ type TagRepository interface {
 	FindById(int) (domain.Tag, error)
 	FindAll() (domain.Tags, error)
 	StoreShopTag(int, int) error
+	FindByShopId(int) (domain.Tags, error)
 }

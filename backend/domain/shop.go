@@ -17,3 +17,8 @@ type RequestCreateShop struct {
 	Image   string `json:"image"`
 	TagIDs  []int  `json:"tag_ids"`
 }
+
+type ShopDetail struct {
+	Shop
+	Tags []Tag `json:"tags"`
+}

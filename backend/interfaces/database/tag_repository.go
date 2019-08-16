@@ -65,3 +65,24 @@ func (repo *TagRepository) StoreShopTag(shopId int, tagId int) (err error) {
 	)
 	return err
 }
+
+func (repo *TagRepository) FindByShopId(shopId int) (tags domain.Tags, err error) {
+	rows, err := repo.Query("SELECT id, name FROM tags INNER JOIN shop_tags ON shop_tags.tag_id = tags.id WHERE shop_id = ?", shopId)
+	defer rows.Close()
+	if err != nil {
+		return
+	}
+	for rows.Next() {
+		var id int
+		var name string
+		if err := rows.Scan(&id, &name); err != nil {
+			continue
+		}
+		tag := domain.Tag{
+			ID:   id,
+			Name: name,
+		}
+		tags = append(tags, tag)
+	}
+	return
+}

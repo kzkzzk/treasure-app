@@ -9,7 +9,7 @@ type ShopInteractor struct {
 	TagRepository  TagRepository
 }
 
-func (interactor *ShopInteractor) Add(u domain.Shop, tagIds []int) (shop domain.Shop, err error) {
+func (interactor *ShopInteractor) Add(u domain.Shop, tagIds []int) (shopDetail domain.ShopDetail, err error) {
 	// TODO: トランザクション
 	identifier, err := interactor.ShopRepository.Store(u)
 	if err != nil {
@@ -23,7 +23,20 @@ func (interactor *ShopInteractor) Add(u domain.Shop, tagIds []int) (shop domain.
 		}
 	}
 
-	shop, err = interactor.ShopRepository.FindById(identifier)
+	shop, err := interactor.ShopRepository.FindById(identifier)
+	if err != nil {
+		return
+	}
+
+	tags, err := interactor.TagRepository.FindByShopId(identifier)
+	if err != nil {
+		return
+	}
+
+	shopDetail = domain.ShopDetail{
+		Shop: shop,
+		Tags: tags,
+	}
 	return
 }
 
@@ -32,7 +45,20 @@ func (interactor *ShopInteractor) Shops() (shop domain.Shops, err error) {
 	return
 }
 
-func (interactor *ShopInteractor) ShopById(identifier int) (shop domain.Shop, err error) {
-	shop, err = interactor.ShopRepository.FindById(identifier)
+func (interactor *ShopInteractor) ShopById(identifier int) (shopDetail domain.ShopDetail, err error) {
+	shop, err := interactor.ShopRepository.FindById(identifier)
+	if err != nil {
+		return
+	}
+
+	tags, err := interactor.TagRepository.FindByShopId(identifier)
+	if err != nil {
+		return
+	}
+
+	shopDetail = domain.ShopDetail{
+		Shop: shop,
+		Tags: tags,
+	}
 	return
 }
