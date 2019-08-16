@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"github.com/gin-contrib/cors"
 	gin "github.com/gin-gonic/gin"
 
 	"treasure-app/backend/interfaces/controllers"
@@ -10,6 +11,18 @@ var Router *gin.Engine
 
 func init() {
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:8081"},
+		AllowMethods: []string{"GET", "POST", "DELETE", "PUT"},
+		AllowHeaders: []string{"Authorization"},
+		// ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		// AllowOriginFunc: func(origin string) bool {
+		// 	return origin == "https://github.com"
+		// },
+		// MaxAge: 12 * time.Hour,
+	}))
 
 	userController := controllers.NewUserController(NewSqlHandler())
 	likeController := controllers.NewLikeController(NewSqlHandler())
