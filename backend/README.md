@@ -20,3 +20,14 @@ interfaces/databaseからのInputをusecase/user_repository.goで、interfaces/c
 
 #### ユーザー詳細 (GET /users/{:id})
 `curl -i -H 'Content-Type:application/json' localhost:8080/users/1`
+
+
+### ショップ
+#### ショップ登録 (POST /shops)
+`curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"name": "test2", "address": "京都", "tel": "090-1234-5678"}' localhost:8080/shops`
+
+#### ショップ一覧 (GET /shops)
+`curl -i -H 'Content-Type:application/json' localhost:8080/shops`
+
+#### ショップ詳細 (GET /shops/{:id})
+`curl -i -H 'Content-Type:application/json' localhost:8080/shops/1`
