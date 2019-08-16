@@ -8,7 +8,7 @@ type UserRepository struct {
 
 func (repo *UserRepository) Store(u domain.User) (id int, err error) {
 	result, err := repo.Execute(
-		"INSERT INTO users (first_name, last_name) VALUES (?,?)", u.FirstName, u.LastName,
+		"INSERT INTO users (name, email, password, image) VALUES (?,?,?,?)", u.Name, u.Email, u.Password, u.Image,
 	)
 	if err != nil {
 		return
@@ -22,41 +22,49 @@ func (repo *UserRepository) Store(u domain.User) (id int, err error) {
 }
 
 func (repo *UserRepository) FindById(identifier int) (user domain.User, err error) {
-	row, err := repo.Query("SELECT id, first_name, last_name FROM users WHERE id = ?", identifier)
+	row, err := repo.Query("SELECT id, name, email, password, image FROM users WHERE id = ?", identifier)
 	defer row.Close()
 	if err != nil {
 		return
 	}
 	var id int
-	var firstName string
-	var lastName string
+	var name string
+	var email string
+	var password string
+	var image string
 	row.Next()
-	if err = row.Scan(&id, &firstName, &lastName); err != nil {
+	if err = row.Scan(&id, &name, &email, &password, &image); err != nil {
 		return
 	}
 	user.ID = id
-	user.FirstName = firstName
-	user.LastName = lastName
+	user.Name = name
+	user.Email = email
+	user.Image = image
+	user.Password = password
 	return
 }
 
 func (repo *UserRepository) FindAll() (users domain.Users, err error) {
-	rows, err := repo.Query("SELECT id, first_name, last_name FROM users")
+	rows, err := repo.Query("SELECT id, name, email, password, image FROM users")
 	defer rows.Close()
 	if err != nil {
 		return
 	}
 	for rows.Next() {
 		var id int
-		var firstName string
-		var lastName string
-		if err := rows.Scan(&id, &firstName, &lastName); err != nil {
+		var name string
+		var email string
+		var password string
+		var image string
+		if err := rows.Scan(&id, &name, &email, &password, &image); err != nil {
 			continue
 		}
 		user := domain.User{
-			ID:        id,
-			FirstName: firstName,
-			LastName:  lastName,
+			ID:       id,
+			Name:     name,
+			Email:    email,
+			Password: password,
+			Image:    image,
 		}
 		users = append(users, user)
 	}

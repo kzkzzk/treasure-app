@@ -1,8 +1,8 @@
 package infrastructure
 
 import (
-	"treasure-app/backend/interfaces/database"
 	"database/sql"
+	"treasure-app/backend/interfaces/database"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -12,7 +12,7 @@ type SqlHandler struct {
 }
 
 func NewSqlHandler() database.SqlHandler {
-	conn, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/sample")
+	conn, err := sql.Open("mysql", "root:password@tcp(localhost:3306)/j-sweet")
 	if err != nil {
 		panic(err.Error)
 	}
