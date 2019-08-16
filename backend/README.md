@@ -38,3 +38,10 @@ interfaces/databaseからのInputをusecase/user_repository.goで、interfaces/c
 
 ### いいね削除 (DELETE /users/like)
 `curl -i -H "Accept: application/json" -H "Content-type: application/json" -X DELETE -d '{"user_id": 1, "shop_id": 1}' localhost:8080/users/like`
+
+### タグ
+#### タグ登録 (POST /tags)
+`curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"name": "test"}' localhost:8080/tags`
+
+#### タグ一覧 (GET /tags)
+`curl -i -H 'Content-Type:application/json' localhost:8080/tags`

@@ -27,5 +27,10 @@ func init() {
 	router.GET("/shops", func(c *gin.Context) { shopController.Index(c) })
 	router.GET("/shops/:id", func(c *gin.Context) { shopController.Show(c) })
 
+	tagController := controllers.NewTagController(NewSqlHandler())
+	// タグ機能
+	router.POST("/tags", func(c *gin.Context) { tagController.Create(c) })
+	router.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
+
 	Router = router
 }
