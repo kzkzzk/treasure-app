@@ -58,3 +58,10 @@ func (repo *TagRepository) FindAll() (tags domain.Tags, err error) {
 	}
 	return
 }
+
+func (repo *TagRepository) StoreShopTag(shopId int, tagId int) (err error) {
+	_, err = repo.Execute(
+		"INSERT INTO shop_tags (shop_id, tag_id) VALUES (?, ?)", shopId, tagId,
+	)
+	return err
+}

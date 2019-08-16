@@ -17,14 +17,25 @@ func NewShopController(sqlHandler database.SqlHandler) *ShopController {
 			ShopRepository: &database.ShopRepository{
 				SqlHandler: sqlHandler,
 			},
+			TagRepository: &database.TagRepository{
+				SqlHandler: sqlHandler,
+			},
 		},
 	}
 }
 
 func (controller *ShopController) Create(c Context) {
-	s := domain.Shop{}
+	s := domain.RequestCreateShop{}
 	c.Bind(&s)
-	shop, err := controller.Interactor.Add(s)
+
+	createShop := domain.Shop{
+		Name:    s.Name,
+		Address: s.Address,
+		Tel:     s.Tel,
+		Image:   s.Image,
+	}
+
+	shop, err := controller.Interactor.Add(createShop, s.TagIDs)
 	if err != nil {
 		c.JSON(500, err)
 		return
