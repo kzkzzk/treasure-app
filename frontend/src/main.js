@@ -9,19 +9,18 @@ Vue.config.productionTip = false
 let app
 
 const config = {
-  apiKey: 'AIzaSyADyZwHaQeIp-qPneOyLVhXjKKYj9hzN94',
-  authDomain: 'treasure-cf395.firebaseapp.com',
-  databaseURL: 'https://treasure-cf395.firebaseio.com',
-  projectId: 'treasure-cf395',
-  storageBucket: '',
-  messagingSenderId: '754038262219',
-  appId: "1:754038262219:web:36ecef7cc1b7f85f"
+  apiKey: process.env.VUE_APP_FIREBASE_APIKEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTHDOMAIN,
+  databaseURL: process.env.VUE_APP_FIREBASE_DATABASEURL,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECTID,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.VUE_APP_FIREBASE_APPID
 }
 firebase.initializeApp(config)
 
 
 firebase.auth().onAuthStateChanged(user => {
-  /* eslint-disable no-new */
+  /* eslint-disable */
   if (!app) {
     new Vue({
       router,
@@ -30,9 +29,3 @@ firebase.auth().onAuthStateChanged(user => {
     }).$mount('#app')
   }
 })
-
-// new Vue({
-//   router,
-//   // store,
-//   render: h => h(App),
-// }).$mount('#app')

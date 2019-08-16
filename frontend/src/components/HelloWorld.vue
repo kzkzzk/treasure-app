@@ -13,6 +13,8 @@
 import axios from 'axios'
 import firebase from 'firebase'
 
+const API_ENDPOINT = process.env.VUE_APP_BACKEND_API_BASE;
+
 export default {
   name: 'HelloWorld',
   data () {
@@ -29,13 +31,13 @@ export default {
       })
     },
     apiUsers: async function () {
-      let res = await axios.get('http://localhost:8080/users', {
+      let res = await axios.get(`${API_ENDPOINT}/users`, {
         headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
       })
       this.msg = res.data
     },
     apiTags: async function () {
-      let res = await axios.get('http://localhost:8080/tags', {
+      let res = await axios.get(`${API_ENDPOINT}/tags`, {
         headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
       })
       this.msg = res.data
