@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Index from '@/components/Index'
 import Signup from '@/components/Signup'
 import Signin from '@/components/Signin'
+import Create from '@/components/shops/Create'
 import firebase from 'firebase'
  
 Vue.use(Router)
@@ -30,7 +31,13 @@ let router = new Router({
       path: '/signin',
       name: 'Signin',
       component: Signin
-    }
+    },
+    {
+      path: '/shops/new',
+      name: 'Create',
+      component: Create,
+      meta: { requiresAuth: true } //routeに認証が必要かを判断
+    },
   ]
 })
 
