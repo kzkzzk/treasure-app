@@ -1,8 +1,25 @@
 <template>
   <div class='hello'>
-    <h1>Hello {{ name }}!!</h1>
+    <p>Hello {{ name }}!!</p>
     <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
+    <div>
+      <h3>タグ一覧</h3>
+      <ul id="example-2">
+        <li v-for='(tag, index) in tags' :key='index'>
+          {{ tag.name }}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h2>ショップ一覧</h2>
+      <div v-for='(shop, index) in shops' :key='index'>
+        <h3>{{ shop.name }}</h3>
+        <div>
+          <p>{{ shop.tel }}</p>
+          <p>{{ shop.address }}</p>
+        </div>
+      </div>
+    </div>
     <button @click="signOut">Sign out</button>
     <button @click="apiUsers">public</button>
     <button @click="apiTags">private</button>
@@ -16,12 +33,18 @@ import firebase from 'firebase'
 const API_ENDPOINT = process.env.VUE_APP_BACKEND_API_BASE;
 
 export default {
-  name: 'HelloWorld',
+  name: 'Index',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      name: firebase.auth().currentUser.email
+      msg: 'ショップ一覧',
+      name: firebase.auth().currentUser.email,
+      tags: [],
+      shops: [],
     }
+  },
+  created () {
+    this.apiTags()
+    this.apiShops()
   },
   methods: {
     signOut: function () {
@@ -40,7 +63,13 @@ export default {
       let res = await axios.get(`${API_ENDPOINT}/tags`, {
         headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
       })
-      this.msg = res.data
+      this.tags = res.data
+    },
+    apiShops: async function () {
+      let res = await axios.get(`${API_ENDPOINT}/shops`, {
+        headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
+      })
+      this.shops = res.data
     }
   }
 }
