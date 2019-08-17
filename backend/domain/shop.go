@@ -11,11 +11,11 @@ type Shop struct {
 type Shops []Shop
 
 type RequestCreateShop struct {
-	Name    string `json:"name"`
-	Address string `json:"address"`
-	Tel     string `json:"tel"`
-	Image   string `json:"image"`
-	TagIDs  []int  `json:"tag_ids"`
+	Name    string `form:"name" json:"name"`
+	Address string `form:"address" json:"address"`
+	Tel     string `form:"tel" json:"tel"`
+	// Image   *multipart.FileHeader `form:"image" json:"image"`
+	TagIDs []int `form:"tag_ids" json:"tag_ids"`
 }
 
 type ShopDetail struct {

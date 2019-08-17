@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/static"
 	gin "github.com/gin-gonic/gin"
 
 	"treasure-app/backend/interfaces/controllers"
@@ -14,7 +15,7 @@ func init() {
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"http://localhost:8081"},
-		AllowMethods: []string{"GET", "POST", "DELETE", "PUT"},
+		AllowMethods: []string{"GET", "POST", "DELETE", "PUT", "OPTIONS"},
 		AllowHeaders: []string{"Authorization"},
 		// ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
@@ -24,7 +25,9 @@ func init() {
 		// MaxAge: 12 * time.Hour,
 	}))
 
-	router.Use(authMiddleware())
+	router.Use(static.Serve("/uploads", static.LocalFile("./uploads", true)))
+
+	//router.Use(authMiddleware())
 
 	userController := controllers.NewUserController(NewSqlHandler())
 	likeController := controllers.NewLikeController(NewSqlHandler())

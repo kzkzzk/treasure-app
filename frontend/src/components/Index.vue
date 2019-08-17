@@ -15,6 +15,9 @@
       <div v-for='(shop, index) in shops' :key='index'>
         <h3>{{ shop.name }}</h3>
         <div>
+          <img :src='`http://localhost:8080/${shop.image}`' v-if='shop.image.length' style="width: 100%;" />
+        </div>
+        <div>
           <p>{{ shop.tel }}</p>
           <p>{{ shop.address }}</p>
         </div>

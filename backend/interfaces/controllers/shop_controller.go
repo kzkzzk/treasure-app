@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"fmt"
+	"net/http"
+	"path/filepath"
 	"strconv"
 	"treasure-app/backend/domain"
 	"treasure-app/backend/interfaces/database"
@@ -26,13 +29,29 @@ func NewShopController(sqlHandler database.SqlHandler) *ShopController {
 
 func (controller *ShopController) Create(c Context) {
 	s := domain.RequestCreateShop{}
+	// file upload
+	file, err := c.FormFile("image")
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+
+	filename := filepath.Base(file.Filename)
+	dir := "uploads/" + filename
+	if err := c.SaveUploadedFile(file, dir); err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+		return
+	}
+
 	c.Bind(&s)
+
+	fmt.Println(s)
 
 	createShop := domain.Shop{
 		Name:    s.Name,
 		Address: s.Address,
 		Tel:     s.Tel,
-		Image:   s.Image,
+		Image:   dir,
 	}
 
 	shop, err := controller.Interactor.Add(createShop, s.TagIDs)

@@ -1,32 +1,52 @@
 <template>
   <div class="contents">
-    <label v-show="!uploadedImage" class="input-item__label"
-      >画像を選択
-      <input type="file" @change="onFileChange" />
-    </label>
-    <div class="preview-item">
-      <img
-        v-show="uploadedImage"
-        class="preview-item-file"
-        :src="uploadedImage"
-        alt=""
-        style="max-width: 100%;"
-      />
-      <div v-show="uploadedImage" class="preview-item-btn" @click="remove">
-        <span class="preview-item-name">{{ img_name }}</span>
-        <span>×</span>
+    <div>
+      <input v-model="name" type="text" class="form-control" placeholder="店名">
+    </div>
+    <div>
+      <input v-model="address" type="text" class="form-control" placeholder="住所">
+    </div>
+    <div>
+      <input v-model="tel" type="tel" class="form-control" id="exampleInputEmail1" placeholder="電話番号">
+    </div>
+
+    <div>
+      <label v-show="!uploadedImage" class="input-item__label"
+        >画像を選択
+        <input type="file" @change="onFileChange" />
+      </label>
+      <div class="preview-item">
+        <img
+          v-show="uploadedImage"
+          class="preview-item-file"
+          :src="uploadedImage"
+          alt=""
+          style="max-width: 100%;"
+        />
+        <div v-show="uploadedImage" class="preview-item-btn" @click="remove">
+          <span class="preview-item-name">{{ img_name }}</span>
+          <span>×</span>
+        </div>
       </div>
     </div>
+    <button @click="apiShops">post</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+// import firebase from 'firebase'
 //import EIcon from '../components/EIcon.vue';
+const API_ENDPOINT = process.env.VUE_APP_BACKEND_API_BASE;
 
 export default {
   name: 'Create',
   data() {
     return {
+      name: '',
+      address: '',
+      tel: '',
+      file: null,
       uploadedImage: '',
       img_name: '',
     };
@@ -35,6 +55,7 @@ export default {
     onFileChange(e) {
       const files = e.target.files || e.dataTransfer.files;
       this.createImage(files[0]);
+      this.file = files[0];
       // 拡張子で分ける（※.が1つの想定です）
       const imgNameExe = files[0].name.split('.');
 
@@ -72,6 +93,30 @@ export default {
     },
     remove() {
       this.uploadedImage = false;
+    },
+    apiShops: async function () {
+      let params = new FormData();
+      let _this = this;
+      if (this.uploadedImage) {
+         params.append('image', this.file);
+      }
+      params.append('name', this.name);
+      params.append('address', this.address);
+      params.append('tel', this.tel);
+
+      axios.post(`${API_ENDPOINT}/shops`, params, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+          'Content-Type': 'multipart/form-data'
+          }
+      })
+      .then(function(res) {
+          _this.$router.push('/');
+      })
+      .catch(function(error) {
+          console.log("err")
+          console.log(error)
+      })
     },
   },
 };
