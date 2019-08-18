@@ -1,12 +1,22 @@
 version: '3.7'
 
 services:
+<<<<<<< HEAD
   j-sweet-db:
     image: mysql:8.0
     container_name: j-sweet-db
+=======
+  treasure-app-db:
+    image: mysql:8.0
+    container_name: treasure-app-db
+>>>>>>> master
     restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: password
     ports:
+<<<<<<< HEAD
       - 3306:3306
+=======
+      - 3306:3306
+>>>>>>> master
