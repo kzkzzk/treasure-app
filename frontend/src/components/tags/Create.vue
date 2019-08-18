@@ -1,5 +1,21 @@
 <template>
   <div class="contents">
+    <header style="display: flex; display: -webkit-flex; -webkit-flex-direction: row;
+   flex-direction: row;">
+      <div style="flex-basis: 400px;">
+        <router-link to="/" class="link">
+        <h1>
+        <span style="margin-right: 20px;">甘味処</span>
+        <span>和</span>
+        <span style="margin-left: 10px; font-size: 20px;">~なごみ~</span>
+        </h1>
+        </router-link>
+      </div>
+
+      <div style="align-items: center;">
+        <p>Hello {{ name }}!!</p>
+      </div>
+    </header>
     <div>
       <h3>タグ作成</h3>
       <ul id="example-2">
@@ -61,3 +77,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+</style>

@@ -3,17 +3,20 @@
     <header style="display: flex; display: -webkit-flex; -webkit-flex-direction: row;
    flex-direction: row;">
       <div style="flex-basis: 400px;">
+        <router-link to="/" class="link">
         <h1>
         <span style="margin-right: 20px;">甘味処</span>
         <span>和</span>
         <span style="margin-left: 10px; font-size: 20px;">~なごみ~</span>
         </h1>
+        </router-link>
       </div>
 
       <div style="align-items: center;">
         <p>Hello {{ name }}!!</p>
       </div>
     </header>
+
     <div>
       <div style="width: 80%; margin: 0 auto;">
         <h2>ショップ一覧</h2>
@@ -99,6 +102,11 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
 h1, h2 {
   font-weight: normal;
 }

@@ -44,6 +44,23 @@ func authMiddleware() gin.HandlerFunc {
 			})
 			c.Abort()
 		}
+
+		// TODO: 後で消す
+		// Set admin privilege on the user corresponding to uid.
+		claims := map[string]interface{}{"admin": true}
+		err = client.SetCustomUserClaims(context.Background(), token.UID, claims)
+		if err != nil {
+			log.Fatalf("error setting custom claims %v\n", err)
+		}
+
+		claims = token.Claims
+		if admin, ok := claims["admin"]; ok {
+			if admin.(bool) {
+				log.Printf("ts")
+				//Allow access to requested admin resource.
+			}
+		}
+
 		log.Printf("Verified ID token: %v\n", token)
 		// next.ServeHTTP(w, r)
 	}

@@ -43,7 +43,7 @@ let router = new Router({
       path: '/tags/new',
       name: 'Create',
       component: TagCreate,
-      meta: { requiresAuth: true } //routeに認証が必要かを判断
+      meta: { requiresAuth: true, isAdmin: true } //routeに認証が必要かを判断
     },
   ]
 })
@@ -52,9 +52,34 @@ let router = new Router({
 router.beforeEach((to, from, next) => {
     let currentUser = firebase.auth().currentUser
     let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+    let isAdmin = to.matched.some(record => record.meta.isAdmin)
     if (requiresAuth && !currentUser) next('signin')
     else if (!requiresAuth && currentUser) next()
-    else next()
+    // else next()
+    else if (currentUser) {
+      currentUser.getIdTokenResult()
+      .then((idTokenResult) => {
+         // Confirm the user is an Admin.
+         if (!!idTokenResult.claims.admin) {
+           // Show admin UI.
+            console.log("admin");
+            next()
+         } else if (isAdmin) {
+          console.log("not permitted");
+          next('index');
+         } else {
+           // Show regular user UI.
+           console.log("regular");
+           next()
+         }
+      })
+      .catch((error) => {
+        console.log(error);
+        next('index');
+      });
+    } else {
+      next()
+    }
   })
   
   export default router
