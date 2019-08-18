@@ -14,7 +14,7 @@ import (
 	"github.com/justinas/alice"
 	"github.com/rs/cors"
 	"github.com/voyagegroup/treasure-app/controller"
-	db2 "github.com/voyagegroup/treasure-app/db"
+	"github.com/voyagegroup/treasure-app/db"
 	"github.com/voyagegroup/treasure-app/firebase"
 	"github.com/voyagegroup/treasure-app/middleware"
 	"github.com/voyagegroup/treasure-app/sample"
@@ -37,8 +37,8 @@ func (s *Server) Init(datasource string) {
 	}
 	s.authClient = authClient
 
-	db := db2.NewDB(datasource)
-	dbcon, err := db.Open()
+	cs := db.NewDB(datasource)
+	dbcon, err := cs.Open()
 	if err != nil {
 		log.Fatalf("failed db init. %s", err)
 	}
@@ -62,6 +62,14 @@ func (s *Server) Route() *mux.Router {
 	corsMiddleware := cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedHeaders: []string{"Authorization"},
+		AllowedMethods: []string{
+			http.MethodHead,
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+		},
 	})
 
 	commonChain := alice.New(
