@@ -40,8 +40,16 @@ func (interactor *ShopInteractor) Add(u domain.Shop, tagIds []int) (shopDetail d
 	return
 }
 
-func (interactor *ShopInteractor) Shops() (shop domain.Shops, err error) {
-	shop, err = interactor.ShopRepository.FindAll()
+func (interactor *ShopInteractor) Shops() (shopDetails []domain.ShopDetail, err error) {
+	shops, err := interactor.ShopRepository.FindAll()
+	for _, shop := range shops {
+		tags, _ := interactor.TagRepository.FindByShopId(shop.ID)
+		shopDetail := domain.ShopDetail{
+			Shop: shop,
+			Tags: tags,
+		}
+		shopDetails = append(shopDetails, shopDetail)
+	}
 	return
 }
 

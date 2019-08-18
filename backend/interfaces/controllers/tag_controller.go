@@ -32,10 +32,10 @@ func (controller *TagController) Create(c Context) {
 }
 
 func (controller *TagController) Index(c Context) {
-	Tags, err := controller.Interactor.Tags()
+	tags, err := controller.Interactor.Tags()
 	if err != nil {
 		c.JSON(500, err)
 		return
 	}
-	c.JSON(200, Tags)
+	c.JSON(200, tags)
 }

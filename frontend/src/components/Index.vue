@@ -20,10 +20,15 @@
         <div>
           <p>{{ shop.tel }}</p>
           <p>{{ shop.address }}</p>
+          <ul id="example-2">
+            <li v-for='(tag, index) in shop.tags' :key='index'>
+              {{ tag.name }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-    <button @click="signOut">Sign out</button>
+    <button @click="signOut" v-if='name.length'>Sign out</button>
     <button @click="apiUsers">public</button>
     <button @click="apiTags">private</button>
   </div>
@@ -39,7 +44,7 @@ export default {
   name: 'Index',
   data () {
     return {
-      msg: 'ショップ一覧',
+      msg: '甘味処 和',
       name: firebase.auth().currentUser.email,
       tags: [],
       shops: [],

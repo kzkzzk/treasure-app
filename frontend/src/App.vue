@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <router-view />
-    <router-link to="/signin">Sign In</router-link>
-    <router-link to="/signup">Sign Up</router-link> 
   </div>
 </template>
 

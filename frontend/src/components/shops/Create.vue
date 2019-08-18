@@ -9,6 +9,13 @@
     <div>
       <input v-model="tel" type="tel" class="form-control" id="exampleInputEmail1" placeholder="電話番号">
     </div>
+    <div>
+      <div v-for='(tag, index) in tags' :key='index'>
+        <label :for='`tag_${tag.id}`'>
+        <input type="checkbox" :id='`tag_${tag.id}`' :value='`${tag.id}`' v-model="tag_ids">
+        {{ tag.name }}</label>
+      </div>
+    </div>
 
     <div>
       <label v-show="!uploadedImage" class="input-item__label"
@@ -49,7 +56,12 @@ export default {
       file: null,
       uploadedImage: '',
       img_name: '',
+      tags: [],
+      tag_ids: [],
     };
+  },
+  created () {
+    this.apiTags()
   },
   methods: {
     onFileChange(e) {
@@ -103,6 +115,7 @@ export default {
       params.append('name', this.name);
       params.append('address', this.address);
       params.append('tel', this.tel);
+      params.append('tag_ids', this.tag_ids);
 
       axios.post(`${API_ENDPOINT}/shops`, params, {
         headers: {
@@ -117,6 +130,12 @@ export default {
           console.log("err")
           console.log(error)
       })
+    },
+    apiTags: async function () {
+      let res = await axios.get(`${API_ENDPOINT}/tags`, {
+        headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
+      })
+      this.tags = res.data
     },
   },
 };
