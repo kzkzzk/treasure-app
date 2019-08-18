@@ -1,36 +1,56 @@
 <template>
-  <div class='hello'>
-    <p>Hello {{ name }}!!</p>
-    <h1>{{ msg }}</h1>
+  <div>
+    <header style="display: flex; display: -webkit-flex; -webkit-flex-direction: row;
+   flex-direction: row;">
+      <div style="flex-basis: 400px;">
+        <h1>
+        <span style="margin-right: 20px;">甘味処</span>
+        <span>和</span>
+        <span style="margin-left: 10px; font-size: 20px;">~なごみ~</span>
+        </h1>
+      </div>
+
+      <div style="align-items: center;">
+        <p>Hello {{ name }}!!</p>
+      </div>
+    </header>
     <div>
-      <h3>タグ一覧</h3>
-      <ul id="example-2">
-        <li v-for='(tag, index) in tags' :key='index'>
-          {{ tag.name }}
-        </li>
-      </ul>
-    </div>
-    <div>
-      <h2>ショップ一覧</h2>
-      <div v-for='(shop, index) in shops' :key='index'>
-        <h3>{{ shop.name }}</h3>
-        <div>
-          <img :src='`http://localhost:8080/${shop.image}`' v-if='shop.image.length' style="width: 100%;" />
+      <div style="width: 80%; margin: 0 auto;">
+        <h2>ショップ一覧</h2>
+        <div style="width: 80%; margin: 0 auto;">
+          <div v-for='(shop, index) in shops' :key='index' style="display: flex; display: -webkit-flex;" class="shop">
+            <div style="flex-basis: 50%;">
+              <div style="width: 70%; margin: 0 auto;">
+                <img :src='`http://localhost:8080/${shop.image}`' v-if='shop.image.length' style="width: 100%;" />
+              </div>
+            </div>
+            <div style="flex-basis: 50%; padding: 20px;">
+              <ul class="tag">
+                <li v-for='(tag, index) in shop.tags' :key='index'>
+                  {{ tag.name }}
+                </li>
+              </ul>
+              <div style="text-align: left;">
+              <h3 style="font-size: 30px; margin-top: 0;">{{ shop.name }}</h3>
+              <p>{{ shop.address }}</p>
+              <p>TEL: {{ shop.tel }}</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div>
-          <p>{{ shop.tel }}</p>
-          <p>{{ shop.address }}</p>
-          <ul id="example-2">
-            <li v-for='(tag, index) in shop.tags' :key='index'>
+          <h3>タグ一覧</h3>
+          <ul class="tag">
+            <li v-for='(tag, index) in tags' :key='index'>
               {{ tag.name }}
             </li>
           </ul>
         </div>
       </div>
     </div>
+    <router-link to="/shops/new">和菓子店投稿</router-link>
     <button @click="signOut" v-if='name.length'>Sign out</button>
-    <button @click="apiUsers">public</button>
-    <button @click="apiTags">private</button>
+    <button @click="apiTags" v-if='name.length'>private</button>
   </div>
 </template>
 
@@ -60,12 +80,6 @@ export default {
         localStorage.removeItem('jwt')
         this.$router.push('/signin')
       })
-    },
-    apiUsers: async function () {
-      let res = await axios.get(`${API_ENDPOINT}/users`, {
-        headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
-      })
-      this.msg = res.data
     },
     apiTags: async function () {
       let res = await axios.get(`${API_ENDPOINT}/tags`, {
@@ -102,5 +116,53 @@ a {
 button {
   margin: 10px 0;
   padding: 10px;
+}
+
+.shop:nth-child(even) {
+  flex-direction: row-reverse;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.shop {
+  margin-bottom: 50px;
+  width: 80%;
+  margin-right: auto;
+}
+
+.tag {
+  color: #fff;
+  font-family: 'Raleway', sans-serif;
+  text-align: left;
+  margin: 0 auto 10px;
+}
+
+.tag li {
+  font-weight: bold;
+  font-size: 18px;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  margin: 0 10px 5px 5px;
+  padding: 0 10px 0 25px;
+  position: relative;
+  background: linear-gradient(45deg, #e4a3cd 25%, transparent 25%, transparent 75%, #e4a3cd 75%),
+              linear-gradient(45deg, #e4a3cd 25%, transparent 25%, transparent 75%, #e4a3cd 75%);
+  background-color: #cc7eb1;
+  background-size: 6px 6px;
+  background-position: 0 0, 3px 3px;
+}
+
+.tag li:after {
+  background: #fff;
+  border-radius: 50%;
+  content: '';
+  display: block;
+  height: 4px;
+  line-height: 30px;
+  position: absolute;
+  top: 13px;
+  left: 7px;
+  width: 4px;
 }
 </style>
