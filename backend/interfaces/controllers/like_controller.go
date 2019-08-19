@@ -23,6 +23,10 @@ func NewLikeController(sqlHandler database.SqlHandler) *LikeController {
 func (controller *LikeController) Create(c Context) {
 	l := domain.Like{}
 	c.Bind(&l)
+
+	user, _ := c.MustGet("AuthorizedUser").(domain.User)
+	l.UserID = user.ID
+
 	Like, err := controller.Interactor.Add(l)
 	if err != nil {
 		c.JSON(500, err)
@@ -34,6 +38,9 @@ func (controller *LikeController) Create(c Context) {
 func (controller *LikeController) Delete(c Context) {
 	l := domain.Like{}
 	c.Bind(&l)
+
+	user, _ := c.MustGet("AuthorizedUser").(domain.User)
+	l.UserID = user.ID
 
 	err := controller.Interactor.Delete(l)
 	if err != nil {

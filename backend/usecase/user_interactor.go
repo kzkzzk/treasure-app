@@ -24,3 +24,13 @@ func (interactor *UserInteractor) UserById(identifier int) (user domain.User, er
 	user, err = interactor.UserRepository.FindById(identifier)
 	return
 }
+
+func (interactor *UserInteractor) UserByFirebaseId(identifier string) (user domain.User, err error) {
+	user, err = interactor.UserRepository.FindByFirebaseId(identifier)
+	return
+}
+
+func (interactor *UserInteractor) Update(u domain.User) (err error) {
+	err = interactor.UserRepository.Update(u)
+	return
+}

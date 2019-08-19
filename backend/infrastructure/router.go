@@ -28,6 +28,7 @@ func init() {
 	router.Use(static.Serve("/uploads", static.LocalFile("./uploads", true)))
 
 	// router.Use(authMiddleware())
+	auth := NewAuth(NewSqlHandler())
 
 	userController := controllers.NewUserController(NewSqlHandler())
 	likeController := controllers.NewLikeController(NewSqlHandler())
@@ -36,18 +37,18 @@ func init() {
 	router.GET("/users", func(c *gin.Context) { userController.Index(c) })
 	router.GET("/users/:id", func(c *gin.Context) { userController.Show(c) })
 	// いいね機能
-	router.POST("users/like", authMiddleware(), func(c *gin.Context) { likeController.Create(c) })
-	router.DELETE("users/like", authMiddleware(), func(c *gin.Context) { likeController.Delete(c) })
+	router.POST("users/like", auth.authMiddleware(), func(c *gin.Context) { likeController.Create(c) })
+	router.DELETE("users/like", auth.authMiddleware(), func(c *gin.Context) { likeController.Delete(c) })
 
 	shopController := controllers.NewShopController(NewSqlHandler())
 
-	router.POST("/shops", authMiddleware(), func(c *gin.Context) { shopController.Create(c) })
+	router.POST("/shops", auth.authMiddleware(), func(c *gin.Context) { shopController.Create(c) })
 	router.GET("/shops", func(c *gin.Context) { shopController.Index(c) })
 	router.GET("/shops/:id", func(c *gin.Context) { shopController.Show(c) })
 
 	tagController := controllers.NewTagController(NewSqlHandler())
 	// タグ機能
-	router.POST("/tags", authMiddleware(), func(c *gin.Context) { tagController.Create(c) })
+	router.POST("/tags", auth.authMiddleware(), func(c *gin.Context) { tagController.Create(c) })
 	router.GET("/tags", func(c *gin.Context) { tagController.Index(c) })
 
 	Router = router

@@ -5,6 +5,8 @@ import (
 )
 
 type Context interface {
+	MustGet(string) interface{}
+	Get(string) (interface{}, bool)
 	Param(string) string
 	Bind(interface{}) error
 	ShouldBind(interface{}) error

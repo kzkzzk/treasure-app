@@ -5,27 +5,46 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strings"
+	"treasure-app/backend/domain"
+	"treasure-app/backend/interfaces/database"
+	"treasure-app/backend/usecase"
 
 	gin "github.com/gin-gonic/gin"
 
 	firebase "firebase.google.com/go"
 )
 
-func authMiddleware() gin.HandlerFunc {
+type Auth struct {
+	// client     *auth.Client
+	Interactor usecase.UserInteractor
+}
+
+func NewAuth(sqlHandler database.SqlHandler) *Auth {
+	return &Auth{
+		Interactor: usecase.UserInteractor{
+			UserRepository: &database.UserRepository{
+				SqlHandler: sqlHandler,
+			},
+		},
+	}
+}
+
+func (auth *Auth) authMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// Firebase SDK のセットアップ
 		// opt := option.WithCredentialsFile(os.Getenv("CREDENTIALS"))
 		app, err := firebase.NewApp(context.Background(), nil) //, opt)
 		if err != nil {
 			fmt.Printf("error: %v\n", err)
-			os.Exit(1)
+			c.JSON(500, err)
+			return
 		}
 		client, err := app.Auth(context.Background())
 		if err != nil {
 			fmt.Printf("error: %v\n", err)
-			os.Exit(1)
+			c.JSON(500, err)
+			return
 		}
 
 		// end init
@@ -42,7 +61,7 @@ func authMiddleware() gin.HandlerFunc {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"error": http.StatusText(http.StatusUnauthorized),
 			})
-			c.Abort()
+			return
 		}
 
 		// TODO: 後で消す
@@ -61,7 +80,35 @@ func authMiddleware() gin.HandlerFunc {
 			}
 		}
 
+		userRecord, err := client.GetUser(context.Background(), token.UID)
+
+		if err != nil {
+			fmt.Printf("error: %v\n", err)
+			c.JSON(500, err)
+			return
+		}
+
+		u := domain.User{
+			FirebaseUID: userRecord.UID,
+			Name:        userRecord.DisplayName,
+			Email:       userRecord.Email,
+			Image:       userRecord.PhotoURL,
+		}
+
+		user, err := auth.Interactor.UserByFirebaseId(u.FirebaseUID)
+		if err != nil {
+			c.JSON(500, err)
+			return
+		}
+
+		err = auth.Interactor.Update(u)
+		if err != nil {
+			c.JSON(500, err)
+			return
+		}
+
+		c.Set("AuthorizedUser", user)
+
 		log.Printf("Verified ID token: %v\n", token)
-		// next.ServeHTTP(w, r)
 	}
 }

@@ -34,9 +34,12 @@
                 </li>
               </ul>
               <div style="text-align: left;">
-              <h3 style="font-size: 30px; margin-top: 0;">{{ shop.name }}</h3>
-              <p>{{ shop.address }}</p>
-              <p>TEL: {{ shop.tel }}</p>
+                <h3 style="font-size: 30px; margin-top: 0;">{{ shop.name }}</h3>
+                <p>{{ shop.address }}</p>
+                <p>TEL: {{ shop.tel }}</p>
+                <vue-star animate="animated bounceIn" color="#F05654">
+                  <i slot="icon" class="fas fa-heart" @click="handleClick(`${ shop.id }`)"></i>
+                </vue-star>
               </div>
             </div>
           </div>
@@ -71,6 +74,7 @@ export default {
       name: firebase.auth().currentUser.email,
       tags: [],
       shops: [],
+      active: false,
     }
   },
   created () {
@@ -95,6 +99,45 @@ export default {
         headers: {'Authorization': `Bearer ${localStorage.getItem('jwt')}`}
       })
       this.shops = res.data
+    },
+    handleClick (shop_id) {
+      //do something
+      if(this.active) { // いいねを消す
+        const params = new URLSearchParams();
+        const _this = this;
+        params.append('shop_id', shop_id);
+
+        axios.delete(`${API_ENDPOINT}/users/like`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            //'Content-Type': 'application/json'
+            },
+          data: params
+        })
+        .then(function(res) {
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+      } else {
+        const params = new URLSearchParams();
+        const _this = this;
+        params.append('shop_id', shop_id);
+
+        axios.post(`${API_ENDPOINT}/users/like`, params, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
+            //'Content-Type': 'application/json'
+            }
+        })
+        .then(function(res) {
+        })
+        .catch(function(error) {
+            console.log(error)
+        })
+      }
+      console.log(this.active);
+      this.active = !this.active;
     }
   }
 }
@@ -102,6 +145,10 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
+.red {
+  color: rgb(240, 86, 84);
+}
+
 .link {
   text-decoration: none;
   color: inherit;
