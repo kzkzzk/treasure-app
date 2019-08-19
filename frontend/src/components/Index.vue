@@ -107,12 +107,11 @@ export default {
         const _this = this;
         params.append('shop_id', shop_id);
 
-        axios.delete(`${API_ENDPOINT}/users/like`, {
+        axios.post(`${API_ENDPOINT}/users/unlike`, params, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`,
             //'Content-Type': 'application/json'
-            },
-          data: params
+            }
         })
         .then(function(res) {
         })

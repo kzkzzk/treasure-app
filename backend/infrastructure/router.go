@@ -38,7 +38,7 @@ func init() {
 	router.GET("/users/:id", func(c *gin.Context) { userController.Show(c) })
 	// いいね機能
 	router.POST("users/like", auth.authMiddleware(), func(c *gin.Context) { likeController.Create(c) })
-	router.DELETE("users/like", auth.authMiddleware(), func(c *gin.Context) { likeController.Delete(c) })
+	router.POST("users/unlike", auth.authMiddleware(), func(c *gin.Context) { likeController.Delete(c) })
 
 	shopController := controllers.NewShopController(NewSqlHandler())
 
