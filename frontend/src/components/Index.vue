@@ -12,7 +12,7 @@
         </router-link>
       </div>
 
-      <div style="align-items: center;">
+      <div style="align-items: center; flex-basis: 200px;">
         <p>Hello {{ name }}!!</p>
       </div>
     </header>
